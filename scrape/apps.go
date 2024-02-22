@@ -15,7 +15,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-
 	"github.com/PuerkitoBio/goquery"
 	"github.com/google/go-github/v28/github"
 )

@@ -15,8 +15,8 @@ jobs:
         id: sbom_generation
         uses: codenotary/sbom.sh-create@main
         with:
-          scan_type: 'grypefs' # Choose the appropriate scan type
-          target: '.' # Assuming you want to scan the entire repository
+          scan_type: 'grype' # Choose the appropriate scan type
+          target: '../main.py' # Assuming you want to scan the entire repository
 
       - name: Get Release Info
         id: get_release

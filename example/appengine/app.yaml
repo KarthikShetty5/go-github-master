@@ -3,12 +3,12 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-runtime: go
-api_version: go1
+runtime: python
+api_version: python3
 
 handlers:
 - url: /.*
-  script: _go_app
+  script: main.py
 
 env_variables:
-  GITHUB_AUTH_TOKEN: "-your-auth-token-here-"
+  GITHUB_AUTH_TOKEN: "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"
