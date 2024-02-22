@@ -1,0 +1,49 @@
+name: Generate SBOM for Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  generate-sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Generate SBOM
+        id: sbom_generation
+        uses: codenotary/sbom.sh-create@main
+        with:
+          scan_type: 'grypefs' # Choose the appropriate scan type
+          target: '.' # Assuming you want to scan the entire repository
+
+      - name: Get Release Info
+        id: get_release
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const release = await github.rest.repos.getRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: context.payload.release.id
+            });
+            return release.data.body; // or just return release.data for the entire release object
+      
+      - name: Update Release
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const sbomUrl = '${{ env.SBOM_SHARE_URL }}';
+            const releaseBody = '${{ steps.get_release.outputs.result }}';
+            const newBody = releaseBody + ' SBOM.sh URL: ' + sbomUrl;
+            await github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: context.payload.release.id,
+              body: newBody
+            });
+
+
