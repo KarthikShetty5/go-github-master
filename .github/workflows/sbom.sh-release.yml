@@ -1,5 +1,4 @@
 name: Generate SBOM for Release
-
 on:
   release:
     types: [published]
